@@ -10,11 +10,9 @@ package thread.test;
 public class APP {
     public static void main(String[] args){
 
-        new APP(5,ThreadType.THREAD).creatAndRun();
-        new APP(5,ThreadType.RUNNABLE).creatAndRun();
+        new APP(100,ThreadType.RUNNABLE).creatAndRun();
     }
     private int threadCount=10;
-
     private ThreadType threadType=ThreadType.THREAD;
     public APP(){}
     public APP(int threadCount,ThreadType threadType){

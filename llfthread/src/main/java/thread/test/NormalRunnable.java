@@ -8,7 +8,19 @@ package thread.test;
  * Time: 17:00
  */
 public class NormalRunnable implements Runnable{
+    private String name=Thread.currentThread().getName();
     public void run() {
-            System.out.println(Thread.currentThread().getName());
+            this.addMe();
+    }
+    public   void  addMe(){
+        synchronized(NormalRunnable.class) {
+            value++;
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+            System.out.println(String.format("name is %s,value=%d", name, value));
+        }
     }
 }
