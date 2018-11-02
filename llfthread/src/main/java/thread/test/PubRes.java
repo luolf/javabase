@@ -17,4 +17,13 @@ public class PubRes {
     public static PubRes getInstance(){
         return  PubResHandle.pubRes;
     }
+
+    public int getTickets() {
+
+        return tickets>0?tickets--:0;
+    }
+
+    public void setTickets(int tickets) {
+        this.tickets = tickets;
+    }
 }

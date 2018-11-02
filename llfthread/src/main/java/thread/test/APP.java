@@ -10,14 +10,20 @@ package thread.test;
 public class APP {
     public static void main(String[] args){
 
-        new APP(100,ThreadType.RUNNABLE).creatAndRun();
+        new APP(11,ThreadType.RUNNABLE).creatAndRun();
     }
+    private void init(){
+        pubRes =PubRes.getInstance();
+        pubRes.setTickets(5);
+    }
+    private PubRes pubRes;
     private int threadCount=10;
     private ThreadType threadType=ThreadType.THREAD;
     public APP(){}
     public APP(int threadCount,ThreadType threadType){
         this.threadCount=threadCount;
         this.threadType=threadType;
+        init();
     }
     public void creatAndRun(){
 
@@ -29,7 +35,7 @@ public class APP {
     }
     public   void creatAndRunByRunable(int threadCount){
         while(threadCount-->0){
-            Thread thread = new Thread(new NormalRunnable(),"NormalRunnable name-"+threadCount);
+            Thread thread = new Thread(new NormalRunnable(pubRes),"NormalRunnable-"+threadCount);
             thread.start();
         }
     }

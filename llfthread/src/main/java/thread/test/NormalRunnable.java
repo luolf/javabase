@@ -8,19 +8,24 @@ package thread.test;
  * Time: 17:00
  */
 public class NormalRunnable implements Runnable{
-    private String name=Thread.currentThread().getName();
+
+    private PubRes pubRes;
+    public NormalRunnable(PubRes pubRes){
+        this.pubRes=pubRes;
+    }
     public void run() {
             this.addMe();
     }
     public   void  addMe(){
+        int myTicketsNum=0;
+         String name=Thread.currentThread().getName();
         synchronized(NormalRunnable.class) {
-            value++;
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-            System.out.println(String.format("name is %s,value=%d", name, value));
+            myTicketsNum=pubRes.getTickets();
+            if(myTicketsNum>0) {
+                System.out.println(String.format("name is %s,ticketsNum=%d", name, myTicketsNum));
+            }else{
+                System.out.println(String.format("name is %s,none tickets!!", name));
+            }
         }
     }
 }
