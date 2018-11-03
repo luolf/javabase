@@ -8,5 +8,5 @@ package thread.test;
  * Time: 17:11
  */
 public enum ThreadType {
-    THREAD,RUNNABLE
+    THREAD,RUNNABLE,CALLABLE
 }

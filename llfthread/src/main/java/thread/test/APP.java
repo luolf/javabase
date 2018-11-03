@@ -1,5 +1,7 @@
 package thread.test;
 
+import java.util.concurrent.*;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -10,7 +12,9 @@ package thread.test;
 public class APP {
     public static void main(String[] args){
 
-        new APP(11,ThreadType.RUNNABLE).creatAndRun();
+        //new APP(11,ThreadType.RUNNABLE).creatAndRun();
+        new APP(11,ThreadType.CALLABLE).creatAndRun();
+
     }
     private void init(){
         pubRes =PubRes.getInstance();
@@ -29,9 +33,31 @@ public class APP {
 
         if(threadType==ThreadType.THREAD){
             creatAndRunByThread(threadCount);
-        }else{
+        }if(threadType==ThreadType.RUNNABLE){
             creatAndRunByRunable(threadCount);
+        }else{
+            creatAndRunByCallable();
         }
+    }
+    public void creatAndRunByCallable(){
+
+        FutureTask<Integer> futureTask = new FutureTask<Integer>(new NormalCallable());
+        ExecutorService executor=Executors.newSingleThreadExecutor();
+        executor.execute(futureTask);
+        executor.shutdown();
+        //new Thread(futureTask).start();
+        try {
+            System.out.println("return from callable:"+futureTask.get(3000L,TimeUnit.MILLISECONDS));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("over!!");
+        }
+
     }
     public   void creatAndRunByRunable(int threadCount){
         while(threadCount-->0){
