@@ -15,11 +15,11 @@ public class NewFixedThreadPool {
         System.out.println("availableProcessors="+Runtime.getRuntime().availableProcessors());
         for (int i = 0; i < 100; i++) {
             final int index = i;
-//            try {
-//                Thread.sleep(index * 1);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                Thread.sleep(index * 1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             cachedThreadPool.execute(new NormalRunnable(pubRes));
 //            cachedThreadPool.submit(new Callable(){
 //                public Integer call() throws Exception {
