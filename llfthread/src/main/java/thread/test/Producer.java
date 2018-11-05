@@ -2,7 +2,7 @@ package thread.test;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Callable;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class Producer implements Runnable {
-    private Integer totals=100;
+    private Integer totals=10;
     private volatile ArrayList<Goods> goodsList  ;
     private ReentrantLock reentrantLock;
     private Condition emptyLock;
@@ -23,12 +23,28 @@ public class Producer implements Runnable {
         PubRes pubRes=PubRes.getInstance();
         Producer producer=new Producer(pubRes);
         Consumer consumer=new Consumer(pubRes);
+
+//        for(int i=0;i<10;i++){
+//            new Thread(consumer).start();
+//        }
+//        for(int i=0;i<10;i++){
+//            new Thread(producer).start();
+//        }
+        ExecutorService exectorService;
+//        ExecutorService exectorService=Executors.newCachedThreadPool();
+//        ExecutorService exectorService=Executors.newFixedThreadPool(12);
+//        ExecutorService exectorService=Executors.newSingleThreadExecutor();
+        exectorService =new ThreadPoolExecutor(11,15,10l,TimeUnit.MILLISECONDS,new LinkedBlockingDeque());
+
         for(int i=0;i<10;i++){
-            new Thread(consumer).start();
+            exectorService.submit(consumer);
+//            exectorService.submit(producer);
         }
         for(int i=0;i<10;i++){
-            new Thread(producer).start();
+//            exectorService.submit(consumer);
+            exectorService.submit(producer);
         }
+        exectorService.shutdown();
 
     }
     public Producer(PubRes pubRes) throws Exception {
@@ -73,8 +89,6 @@ public class Producer implements Runnable {
                 System.out.println(String.format("》》》》》》生产者%s:仓库已满！！阻塞自己",threadName));
                 fullLock.await();
                 System.out.println(String.format("********************生产者%s:被唤醒！！",threadName));
-//                Thread.sleep(1000);
-//                System.out.println(String.format("********************生产者%s:循环结束！！",threadName));
             } catch (InterruptedException e) {
                 System.out.println(String.format("生产者%s:InterruptedException仓库已满%s！！",threadName,e.getMessage()));
             }finally {

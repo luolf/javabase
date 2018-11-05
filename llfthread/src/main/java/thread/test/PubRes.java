@@ -18,7 +18,7 @@ public class PubRes {
     private Condition emptyLock ;
     private Condition fullLock ;
     private PubRes(){
-        reentrantLock =new ReentrantLock();
+        reentrantLock =new ReentrantLock(true);
         emptyLock=reentrantLock.newCondition();
         fullLock=reentrantLock.newCondition();
     }

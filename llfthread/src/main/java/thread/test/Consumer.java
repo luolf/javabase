@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 16:33
  */
 public class Consumer implements  Runnable {
-    private Integer totals=100;
+    private Integer totals=10;
     private volatile ArrayList<Goods> goodsList  ;
     private ReentrantLock reentrantLock;
     private Condition emptyLock;
