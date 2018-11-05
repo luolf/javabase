@@ -1,5 +1,9 @@
 package thread.test;
 
+import java.util.ArrayList;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -9,8 +13,14 @@ package thread.test;
  */
 public class PubRes {
     private int tickets=100;
-    private
+    private volatile ArrayList<Goods> goodsList =new ArrayList<Goods>() ;
+    private ReentrantLock reentrantLock;
+    private Condition emptyLock ;
+    private Condition fullLock ;
     private PubRes(){
+        reentrantLock =new ReentrantLock();
+        emptyLock=reentrantLock.newCondition();
+        fullLock=reentrantLock.newCondition();
     }
     private static class PubResHandle{
         private static final PubRes pubRes=new PubRes();
@@ -26,5 +36,37 @@ public class PubRes {
 
     public void setTickets(int tickets) {
         this.tickets = tickets;
+    }
+
+    public ArrayList<Goods> getGoodsList() {
+        return goodsList;
+    }
+
+    public void setGoodsList(ArrayList<Goods> goodsList) {
+        this.goodsList = goodsList;
+    }
+
+    public ReentrantLock getReentrantLock() {
+        return reentrantLock;
+    }
+
+    public void setReentrantLock(ReentrantLock reentrantLock) {
+        this.reentrantLock = reentrantLock;
+    }
+
+    public Condition getEmptyLock() {
+        return emptyLock;
+    }
+
+    public void setEmptyLock(Condition emptyLock) {
+        this.emptyLock = emptyLock;
+    }
+
+    public Condition getFullLock() {
+        return fullLock;
+    }
+
+    public void setFullLock(Condition fullLock) {
+        this.fullLock = fullLock;
     }
 }
