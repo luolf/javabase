@@ -9,6 +9,7 @@ package thread.test;
  */
 public class PubRes {
     private int tickets=100;
+    private
     private PubRes(){
     }
     private static class PubResHandle{
