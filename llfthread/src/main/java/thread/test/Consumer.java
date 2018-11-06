@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Time: 16:33
  */
 public class Consumer implements  Runnable {
-    private Integer totals=10;
+    private Integer totals=50;
     private volatile ArrayList<Goods> goodsList  ;
     private ReentrantLock reentrantLock;
     private Condition emptyLock;
@@ -30,8 +30,12 @@ public class Consumer implements  Runnable {
 
     public void run() {
         String threadName=Thread.currentThread().getName();
-        while(totals>0){
+        while(true){
             reentrantLock.lock();
+            if(totals==0){
+                reentrantLock.unlock();
+                break;
+            }
             consum(threadName);
             reentrantLock.unlock();
             try{
@@ -44,11 +48,11 @@ public class Consumer implements  Runnable {
         System.out.println(String.format("消费者%s:不再消费！！",threadName));
     }
     private void consum(String threadName){
-        if(totals==0){
-            System.out.println(String.format("~~~~~消费者%s:唤醒其余消费者！！",threadName));
-            emptyLock.signalAll();
-            return ;
-        }
+//        if(totals==0){
+//            System.out.println(String.format("~~~~~消费者%s:唤醒其余消费者！！",threadName));
+//            emptyLock.signalAll();
+//            return ;
+//        }
          if(this.goodsList.size()>0){
              Goods goods= this.goodsList.remove(0);
              System.out.println(String.format("消费者%s: 消费oooooooooooo%s",threadName,goods));

@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class Producer implements Runnable {
-    private Integer totals=10;
+    private Integer totals=50;
     private volatile ArrayList<Goods> goodsList  ;
     private ReentrantLock reentrantLock;
     private Condition emptyLock;
@@ -31,10 +31,10 @@ public class Producer implements Runnable {
 //            new Thread(producer).start();
 //        }
         ExecutorService exectorService;
-//        ExecutorService exectorService=Executors.newCachedThreadPool();
-//        ExecutorService exectorService=Executors.newFixedThreadPool(12);
-//        ExecutorService exectorService=Executors.newSingleThreadExecutor();
-        exectorService =new ThreadPoolExecutor(11,15,10l,TimeUnit.MILLISECONDS,new LinkedBlockingDeque());
+         exectorService=Executors.newCachedThreadPool();
+//         exectorService=Executors.newFixedThreadPool(12);
+//         exectorService=Executors.newSingleThreadExecutor();
+//        exectorService =new ThreadPoolExecutor(11,15,10l,TimeUnit.MILLISECONDS,new LinkedBlockingDeque());
 
         for(int i=0;i<10;i++){
             exectorService.submit(consumer);
@@ -59,8 +59,12 @@ public class Producer implements Runnable {
 
     public void run() {
        String threadName=Thread.currentThread().getName();
-       while(totals>0){
+       while(true){
            reentrantLock.lock();
+           if(totals==0){
+               reentrantLock.unlock();
+               break;
+           }
            product(threadName);
            reentrantLock.unlock();
            try {
@@ -72,11 +76,11 @@ public class Producer implements Runnable {
         System.out.println(String.format("生产者%s:结束生产！！",threadName));
     }
     private void product(String threadName){
-        if(totals==0){
-            System.out.println(String.format("~~~~~生产者%s:唤醒其余生产者！！",threadName));
-            fullLock.signalAll();
-            return ;
-        }
+//        if(totals==0){
+//            System.out.println(String.format("~~~~~生产者%s:唤醒其余阻塞中的生产者！！",threadName));
+//            fullLock.signalAll();
+//            return ;
+//        }
         if(goodsList.size()<50){
             Goods goods=new Goods(threadName+":"+totals,threadName);
             System.out.println(String.format("生产者%s:生产了%s",threadName,goods));
