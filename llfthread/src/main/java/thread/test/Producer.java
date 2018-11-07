@@ -1,6 +1,8 @@
 package thread.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
@@ -74,6 +76,7 @@ public class Producer implements Runnable {
            }
        }
         System.out.println(String.format("生产者%s:结束生产！！",threadName));
+        Hashtable j;
     }
     private void product(String threadName){
 //        if(totals==0){
