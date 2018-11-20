@@ -20,13 +20,32 @@ public class Test2 {
     public static void main(String[] str){
         String s="中华人民共和国";
         Test2 test2=new Test2(s);
-        A a=test2.new A();
-        new Thread(a).start();
-        new Thread(a).start();
+
+
+       final A a=test2.new A();
+
+        // 使用方式一
+//        new Thread(a).start();
+//        new Thread(a).start();
+
+        //使用方式二
+        for(int i=0;i<2;i++) {
+            new Thread(new Runnable() {
+                public void run() {
+                    a.doPrintTask();
+                }
+            }).start();
+        }
+
+
     }
     class A implements Runnable{
         int idx=0;
         public  void run(){
+            doPrintTask();
+
+        }
+        public  void doPrintTask(){
             synchronized(this){
                 while(idx<result.length()){
                     print(idx++);
@@ -36,22 +55,12 @@ public class Test2 {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }finally {
-    //                    System.out.println("hee");
+                        //                    System.out.println("hee");
                     }
-              }
+                }
                 this.notify();
             }
-
         }
     }
-    class B implements Runnable{
-        public  void run(){
 
-        }
-    }
-    class C implements Runnable{
-        public  void run(){
-
-        }
-    }
 }
