@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created with IntelliJ IDEA.
- * Description:
+ * Description: 在自旋锁基础上加入重入功能，实现可重入
  * User: luolifeng
  * Date: 2018-11-21
  * Time: 10:52
@@ -19,10 +19,10 @@ public class ReenTrantLockCustom {
         //当前线程获取过锁则计算加1并返回
         if(threadAtomicReference.get()==current) {
             count++;
-            System.out.println(String.format("%s %d ",Thread.currentThread().getName(),count ));
+//            System.out.println(String.format("%s %d ",Thread.currentThread().getName(),count ));
             return;
         }
-        System.out.println(String.format("%s = %d ",Thread.currentThread().getName(),count ));
+//        System.out.println(String.format("%s = %d ",Thread.currentThread().getName(),count ));
         while(!threadAtomicReference.compareAndSet(null,current)){}
     }
     public void unlock(){
@@ -30,13 +30,11 @@ public class ReenTrantLockCustom {
         //当前线程正持有锁，则计算器减1
         if(threadAtomicReference.get()==current) {
             count--;
-
-        }
-        if(count==0){
-            //计数器为0则尝试释放锁，只有持有锁的线程才会释放成功
-            System.out.println(String.format("%s 准备释放 ",Thread.currentThread().getName() ));
+            if(count<0)
+                //计数器为0则尝试释放锁
             threadAtomicReference.compareAndSet(current,null);
         }
+
 
     }
 
@@ -58,9 +56,8 @@ public class ReenTrantLockCustom {
                 lock();
                 setTaskName(String.valueOf(this.hashCode()));
                 lock();
-
                 print();
-//            unlock();
+                unlock();
                 unlock();
 
 
