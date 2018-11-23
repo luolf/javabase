@@ -22,7 +22,6 @@ public class SingletonUseAtomicReference {
             SingletonUseAtomicReference singleton = instance.get();
             if (singleton != null) {
                 System.out.println(String.format("%s获取到实例%s",Thread.currentThread().getName(),singleton));
-
                 return singleton;
             }
             System.out.println(String.format("%s准备创建实例",Thread.currentThread().getName()));
