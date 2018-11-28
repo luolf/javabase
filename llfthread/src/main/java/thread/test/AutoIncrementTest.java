@@ -7,7 +7,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created with IntelliJ IDEA.
- * Description:测试多线程数字自增性能
+ * Description:测试使用不同方法同步多线程数字自增性能
+ * 多线程无同步、单线程、CAS多线程、synchronized多线程、ReentrantLock多线程、
  * User: luolifeng
  * Date: 2018-11-23
  * Time: 14:04
@@ -44,7 +45,7 @@ public class AutoIncrementTest {
         AutoIncrementTest.print("mulThreadNOSyn",totalCnt*2,System.currentTimeMillis()-singleStart2);
 
         long synStart=System.currentTimeMillis();
-        for(int i=0;i<2;i++){
+        for(int i=0;i<5;i++){
             new Thread(new Runnable() {
                 public void run() {
                     for(int i=0;i<totalCnt;i++){
@@ -63,7 +64,7 @@ public class AutoIncrementTest {
 
 
         long lockStart=System.currentTimeMillis();
-        for(int i=0;i<2;i++){
+        for(int i=0;i<5;i++){
             new Thread(new Runnable() {
                 public void run() {
                     for(int i=0;i<totalCnt;i++){
